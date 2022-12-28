@@ -150,10 +150,10 @@ namespace AutoTraffic
                                 e.Graphics.FillEllipse(Brushes.Aqua, item.cur_x, item.cur_y, wid, wid);
                             }
                         }
-                        e.Graphics.FillEllipse(Brushes.Red, x, y, wid, wid);
+                        //e.Graphics.FillEllipse(Brushes.Red, x, y, wid, wid);
                         if (x >= pictureBox1.Width / 8 || count > 0)
                         {
-                            e.Graphics.FillEllipse(Brushes.Blue, x1, y1, wid, wid);
+                            //e.Graphics.FillEllipse(Brushes.Blue, x1, y1, wid, wid);
                         }
 
                         base.OnPaint(e);
@@ -357,13 +357,16 @@ namespace AutoTraffic
 
                 for (int i = 0; i < CountLines; i++)
                 {
+                    var coordYReverse = ((i + CountLines) * pictureBox1.Height / (CountLines * CountWays)) + 5;
+                    var coordY = (i * pictureBox1.Height / (CountLines * CountWays)) + 5;
+
                     _reverseCars.Add(new List<Car>());
 
                     var reverseCar = new Car(wid);
                     reverseCar.start_x = wid + 600 + (i * 100);
                     reverseCar.cur_x = wid + 600 + (i * 100);
-                    reverseCar.start_y = (i + 2) * 80;
-                    reverseCar.cur_y = (i + 2) * 80;
+                    reverseCar.start_y = coordYReverse;
+                    reverseCar.cur_y = coordYReverse;
                     reverseCar.speed = new Random().Next(5, 7);
                     reverseCar.isGenerate = false;
 
@@ -374,8 +377,8 @@ namespace AutoTraffic
                     var car = new Car(wid);
                     car.start_x = -wid;
                     car.cur_x = -wid;
-                    car.start_y = i * 80;
-                    car.cur_y = i * 80;
+                    car.start_y = coordY;
+                    car.cur_y = coordY;
                     car.speed = new Random().Next(5, 7);
                     car.isGenerate = false;
 
