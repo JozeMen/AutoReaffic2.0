@@ -259,6 +259,8 @@ namespace AutoTraffic
             {
                 for (var i = 0; i < _reverseCars[j].Count; i++)
                 {
+                    // Если авто появилось на экране и из-за неё еще не генерировалась новая машина,
+                    // то создаем новую на расстоянии соответсвующем закону распределения.
                     if (_reverseCars[j][i].cur_x < 2 * wid + 500 + (j * 100) && !_reverseCars[j][i].isGenerate)
                     {
                         _reverseCars[j][i].isGenerate = true;
@@ -268,9 +270,11 @@ namespace AutoTraffic
                         GenerateCars(_reverseCars[j][i].cur_x, _reverseCars[index][0].cur_y, index, false);
                     }
 
+                    // Изменяем позицию согласно скорости авто
                     _reverseCars[j][i].cur_x -= _reverseCars[j][i].speed;
 
-                    if (_reverseCars[j][i].cur_x < -200*wid)
+                    // Если авто удалилось от экрана слишком далеко, удаляем его
+                    if (_reverseCars[j][i].cur_x < -200 * wid)
                     {
                         _reverseCars[j].Remove(_reverseCars[j][i]);
                     }
@@ -360,43 +364,7 @@ namespace AutoTraffic
             Form1 form1 = new Form1();
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
 
-            if (!_isStopped)
-            {
-                _reverseCars = new List<List<Car>>();
-                _cars = new List<List<Car>>();
-
-                for (int i = 0; i < CountLines; i++)
-                {
-                    var coordYReverse = ((i + CountLines) * pictureBox1.Height / (CountLines * CountWays)) + 5;
-                    var coordY = (i * pictureBox1.Height / (CountLines * CountWays)) + 5;
-
-                    _reverseCars.Add(new List<Car>());
-
-                    var reverseCar = new Car(wid);
-                    reverseCar.start_x = wid + 600 + (i * 100);
-                    reverseCar.cur_x = wid + 600 + (i * 100);
-                    reverseCar.start_y = coordYReverse;
-                    reverseCar.cur_y = coordYReverse;
-                    reverseCar.speed = new Random().Next(5, 7);
-                    reverseCar.isGenerate = false;
-
-                    _reverseCars[i].Add(reverseCar);
-
-                    _cars.Add(new List<Car>());
-
-                    var car = new Car(wid);
-                    car.start_x = -wid;
-                    car.cur_x = -wid;
-                    car.start_y = coordY;
-                    car.cur_y = coordY;
-                    car.speed = new Random().Next(5, 7);
-                    car.isGenerate = false;
-
-                    _cars[i].Add(car);
-                }
-            }
-
-            _isStopped = false;
+            var offset = 0;
 
             using (g = Graphics.FromImage(pictureBox1.Image))
             {
@@ -432,6 +400,7 @@ namespace AutoTraffic
                         }
                         break;
                     case "загород":
+                        offset++;
                         p = new Pen(Color.White, 4);
                         p.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
                         for (int i = 2; i < (lines * CountWays) + 1; i++)
@@ -479,6 +448,44 @@ namespace AutoTraffic
                 }
                 trigger = true;
             }
+
+            if (!_isStopped)
+            {
+                _reverseCars = new List<List<Car>>();
+                _cars = new List<List<Car>>();
+
+                for (int i = 0; i < CountLines - offset; i++)
+                {
+                    var coordYReverse = ((i + CountLines) * pictureBox1.Height / (CountLines * CountWays)) + 5;
+                    var coordY = ((i + offset) * pictureBox1.Height / (CountLines * CountWays)) + 5;
+
+                    _reverseCars.Add(new List<Car>());
+
+                    var reverseCar = new Car(wid);
+                    reverseCar.start_x = wid + 600 + (i * 100);
+                    reverseCar.cur_x = wid + 600 + (i * 100);
+                    reverseCar.start_y = coordYReverse;
+                    reverseCar.cur_y = coordYReverse;
+                    reverseCar.speed = new Random().Next(5, 7);
+                    reverseCar.isGenerate = false;
+
+                    _reverseCars[i].Add(reverseCar);
+
+                    _cars.Add(new List<Car>());
+
+                    var car = new Car(wid);
+                    car.start_x = -wid;
+                    car.cur_x = -wid;
+                    car.start_y = coordY;
+                    car.cur_y = coordY;
+                    car.speed = new Random().Next(5, 7);
+                    car.isGenerate = false;
+
+                    _cars[i].Add(car);
+                }
+            }
+
+            _isStopped = false;
         }
     }
 }
