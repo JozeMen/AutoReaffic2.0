@@ -348,7 +348,6 @@ namespace AutoTraffic
         {
             Form1 form1 = new Form1();
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            //cars = new Car[CountLines];
 
             if (!_isStopped)
             {
