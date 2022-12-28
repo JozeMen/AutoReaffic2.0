@@ -92,8 +92,9 @@ namespace AutoTraffic
             _intensity = form.Intensity;
             _startInterval = form.StartInterval;
             _endInterval = form.EndInterval;
-            _randomDispersion= form.RandomDispersion;
-            _mathExpectation= form.MathExpectation;
+            _randomDispersion = form.RandomDispersion;
+            _mathExpectation = form.MathExpectation;
+            _determinateInterval = form.DeterminateInterval;
         }
 
         private void buttonPause_Click(object sender, EventArgs e)
@@ -109,6 +110,7 @@ namespace AutoTraffic
         private void buttonStop_Click(object sender, EventArgs e)
         {
             timer.Tick -= new EventHandler(timer1_FirestTick);
+            timer.Tick -= new EventHandler(timer1_SecondTick);
             trigger = false;
             timer.Stop();
             x = 0;
@@ -228,15 +230,22 @@ namespace AutoTraffic
             }*/
             for (int j = 0; j < _reverseCars.Count; j++)
             {
-                foreach (var item in _reverseCars[j])
+                for (var i = 0; i < _reverseCars[j].Count; i++)
                 {
-                    if (item.cur_x > 2 * wid + 500 + (j * 100))
+                    if (_reverseCars[j][i].cur_x < 2 * wid + 500 + (j * 100) && !_reverseCars[j][i].isGenerate)
                     {
-                        item.cur_x = item.start_x;
+                        _reverseCars[j][i].isGenerate = true;
+
+                        var index = new Random().Next(0, _reverseCars.Count);
+
+                        GenerateCars(_reverseCars[j][i].cur_x, _reverseCars[index][0].cur_y, index);
                     }
-                    else
+
+                    _reverseCars[j][i].cur_x -= _reverseCars[j][i].speed;
+
+                    if (_reverseCars[j][i].cur_x < -200*wid)
                     {
-                        item.cur_x -= item.speed;
+                        _reverseCars[j].Remove(_reverseCars[j][i]);
                     }
                 }
             }
@@ -256,31 +265,37 @@ namespace AutoTraffic
 
             if (_isDeterminate)
             {
-                positionX = (float)(5 / 0.03) * _intensity;
+                positionX = (float)(5 / 0.03) * _determinateInterval;
             }
             else if (_isRandom)
             {
                 switch (_law)
                 {
                     case "нормальное":
+                        var t = new Random().NextDouble();
+                        positionX = (float)(1 / Math.Sqrt(2 * Math.PI * Math.Pow(_randomDispersion, 2)) * Math.Exp(-Math.Pow((t - _mathExpectation), 2) / 2 * _randomDispersion));
                         break;
                     case "равномерное":
+                        t = new Random().NextDouble();
+                        positionX = (float)((t - _startInterval) / (_endInterval - _startInterval));
                         break;
                     case "показательное":
+                        t = new Random().NextDouble();
+                        positionX = (float)(1 - Math.Exp(-_intensity * t));
                         break;
                 }
             }
             else
-            { 
-                
+            {
+                positionX = 100f;
             }
 
             var car = new Car(wid);
-            car.start_x = (int)(x - positionX);
-            car.cur_x = (int)(x - positionX);
+            car.start_x = (int)(x + positionX + 100);
+            car.cur_x = (int)(x + positionX + 100);
             car.start_y = y;
             car.cur_y = y;
-            car.speed = 5;
+            car.speed = new Random().Next(5, 7);
 
             _reverseCars[index].Add(car);
         }
@@ -294,25 +309,26 @@ namespace AutoTraffic
         {
             Form1 form1 = new Form1();
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            cars = new Car[CountWays];
+            cars = new Car[CountLines];
 
             if (!_isStopped)
             {
                 _reverseCars = new List<List<Car>>();
 
-                /*for (int i = 0; i < CountWays; i++)
+                for (int i = 0; i < CountLines; i++)
                 {
-                    _reverseCars[i] = new List<Car>();
+                    _reverseCars.Add(new List<Car>());
 
                     var car = new Car(wid);
-                    car.start_x = wid + 500 + (i * 100);
-                    car.cur_x = wid + 500 + (i * 100);
+                    car.start_x = wid + 600 + (i * 100);
+                    car.cur_x = wid + 600 + (i * 100);
                     car.start_y = (i + 2) * 80;
                     car.cur_y = (i + 2) * 80;
-                    car.speed = 5;
+                    car.speed = new Random().Next(5, 7);
+                    car.isGenerate = false;
 
                     _reverseCars[i].Add(car);
-                }*/
+                }
             }
 
             _isStopped = false;

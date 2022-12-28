@@ -28,6 +28,8 @@ namespace AutoTraffic
         public int cur_x;
         public int cur_y;
 
+        public bool isGenerate;
+
         public Car()
         {
             this.speed = new Random().Next(30, 60);
