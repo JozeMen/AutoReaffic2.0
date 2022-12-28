@@ -27,7 +27,7 @@ namespace AutoTraffic
 
         private bool _isStopped = false;
 
-        private Car[] cars;
+        //private Car[] cars;
         //private Car[] _reverseCars;
 
 
@@ -53,6 +53,7 @@ namespace AutoTraffic
         private double _lengthBetweenCars = 0;
 
         private List<List<Car>> _reverseCars;
+        private List<List<Car>> _cars;
 
         public string setRoaType
         {
@@ -134,8 +135,12 @@ namespace AutoTraffic
                 {
                     for (int i = 0; i < CountLines * CountWays; i++)
                     {
-                        for (int j = 0; j < CountWays; j++)
+                        for (int j = 0; j < _cars.Count; j++)
                         {
+                            foreach (var item in _cars[j])
+                            {
+                                e.Graphics.FillEllipse(Brushes.Aqua, item.cur_x, item.cur_y, wid, wid);
+                            }
                             //e.Graphics.FillEllipse(Brushes.Green, cars[j].cur_x, cars[j].cur_y, wid, wid);
                         }
                         for (int j = 0; j < _reverseCars.Count; j++)
@@ -205,10 +210,32 @@ namespace AutoTraffic
             }
 
             int max = 1000;
-            x += speed_x; //неа, тут меняем ск-ть
-            for (int i = 0; i < cars.Length; i++)
+            /*x += speed_x; //неа, тут меняем ск-ть
+            for (int i = 0; i < _cars.Count; i++)
             {
                 //cars[i].cur_x += 5;
+            }*/
+
+            for (int j = 0; j < _cars.Count; j++)
+            {
+                for (var i = 0; i < _cars[j].Count; i++)
+                {
+                    if (_cars[j][i].cur_x > wid + 10 && !_cars[j][i].isGenerate)
+                    {
+                        _cars[j][i].isGenerate = true;
+
+                        var index = new Random().Next(0, _cars.Count);
+
+                        GenerateCars(_cars[j][i].cur_x, _cars[index][0].cur_y, index, true);
+                    }
+
+                    _cars[j][i].cur_x += _cars[j][i].speed;
+
+                    if (_cars[j][i].cur_x > 200 * wid)
+                    {
+                        _cars[j].Remove(_cars[j][i]);
+                    }
+                }
             }
 
             this.Refresh();
@@ -238,7 +265,7 @@ namespace AutoTraffic
 
                         var index = new Random().Next(0, _reverseCars.Count);
 
-                        GenerateCars(_reverseCars[j][i].cur_x, _reverseCars[index][0].cur_y, index);
+                        GenerateCars(_reverseCars[j][i].cur_x, _reverseCars[index][0].cur_y, index, false);
                     }
 
                     _reverseCars[j][i].cur_x -= _reverseCars[j][i].speed;
@@ -259,7 +286,8 @@ namespace AutoTraffic
         /// <param name="x">Позиция Х.</param>
         /// <param name="y">Позиция Y.</param>
         /// <param name="index">Индекс полосы для генерации машины.</param>
-        private void GenerateCars(int x, int y, int index)
+        /// <param name="isReverse">Генерировать ли авто в противоположную сторону.</param>
+        private void GenerateCars(int x, int y, int index, bool isReverse)
         {
             var positionX = 0f;
 
@@ -291,13 +319,24 @@ namespace AutoTraffic
             }
 
             var car = new Car(wid);
-            car.start_x = (int)(x + positionX + 100);
-            car.cur_x = (int)(x + positionX + 100);
             car.start_y = y;
             car.cur_y = y;
             car.speed = new Random().Next(5, 7);
 
-            _reverseCars[index].Add(car);
+            if (isReverse)
+            {
+                car.start_x = (int)(x - positionX - 100);
+                car.cur_x = (int)(x - positionX - 100);
+
+                _cars[index].Add(car);
+            }
+            else
+            {
+                car.start_x = (int)(x + positionX + 100);
+                car.cur_x = (int)(x + positionX + 100);
+
+                _reverseCars[index].Add(car);
+            }
         }
 
         public void Lighto4(int x, int y)
@@ -309,25 +348,38 @@ namespace AutoTraffic
         {
             Form1 form1 = new Form1();
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            cars = new Car[CountLines];
+            //cars = new Car[CountLines];
 
             if (!_isStopped)
             {
                 _reverseCars = new List<List<Car>>();
+                _cars = new List<List<Car>>();
 
                 for (int i = 0; i < CountLines; i++)
                 {
                     _reverseCars.Add(new List<Car>());
 
+                    var reverseCar = new Car(wid);
+                    reverseCar.start_x = wid + 600 + (i * 100);
+                    reverseCar.cur_x = wid + 600 + (i * 100);
+                    reverseCar.start_y = (i + 2) * 80;
+                    reverseCar.cur_y = (i + 2) * 80;
+                    reverseCar.speed = new Random().Next(5, 7);
+                    reverseCar.isGenerate = false;
+
+                    _reverseCars[i].Add(reverseCar);
+
+                    _cars.Add(new List<Car>());
+
                     var car = new Car(wid);
-                    car.start_x = wid + 600 + (i * 100);
-                    car.cur_x = wid + 600 + (i * 100);
-                    car.start_y = (i + 2) * 80;
-                    car.cur_y = (i + 2) * 80;
+                    car.start_x = -wid;
+                    car.cur_x = -wid;
+                    car.start_y = i * 80;
+                    car.cur_y = i * 80;
                     car.speed = new Random().Next(5, 7);
                     car.isGenerate = false;
 
-                    _reverseCars[i].Add(car);
+                    _cars[i].Add(car);
                 }
             }
 
