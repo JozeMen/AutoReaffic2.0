@@ -325,15 +325,26 @@ namespace AutoTraffic
 
             if (isReverse)
             {
-                car.start_x = (int)(x - positionX - 100);
-                car.cur_x = (int)(x - positionX - 100);
+                var coordX = (int)(x - positionX - 100);
+                if (Math.Abs(_cars[index].Last().cur_x - coordX) < wid * 2)
+                {
+                    coordX -= wid * 2;
+                }
+                car.start_x = coordX;
+                car.cur_x = coordX;
+
 
                 _cars[index].Add(car);
             }
             else
             {
-                car.start_x = (int)(x + positionX + 100);
-                car.cur_x = (int)(x + positionX + 100);
+                var coordX = (int)(x + positionX + 100);
+                if (Math.Abs(_reverseCars[index].Last().cur_x - coordX) < wid * 2)
+                {
+                    coordX += wid * 2;
+                }
+                car.start_x = coordX;
+                car.cur_x = coordX;
 
                 _reverseCars[index].Add(car);
             }
