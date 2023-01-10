@@ -16,6 +16,7 @@ namespace AutoTraffic
         private int CountWays;
         private int CountLines;
         private string roadType;
+        private bool isTonnel = false;
 
         public int getCountWays
         {
@@ -54,17 +55,41 @@ namespace AutoTraffic
         {
             /*if (comboBox1.item)
             {
-
+                var stringNumber = "123";
+                int numericValue;
+                bool isNumber = int.TryParse(stringNumber, out numericValue);
             }*/
+
             CountLines = (int)numericUpDownLines.Value;
             CountWays = (int)numericUpDownWay.Value;
             roadType = comboBox1.Text;
 
             form2 = new Modeling();
-
+            int time = -1;
             form2.setCountLines = CountLines;
             form2.setCountWays = CountWays;
             form2.setRoaType = roadType;
+            //form2.setTimeTrafficLight = (string.IsNullOrEmpty(textBoxLights.Text))
+            //    ? 0
+            //    : int.TryParse(textBoxLights.Text, out time);
+            // : int.Parse(textBoxLights.Text);
+            form2.setTimeTrafficLight = (int)numericUpDownTonnel.Value;
+            //if (string.IsNullOrEmpty(textBoxLights.Text))
+            //{
+            //    form2.setTimeTrafficLight = 0;
+            //}
+            //else
+            //{
+            //    if (int.TryParse(textBoxLights.Text, out time))
+            //    {
+            //        form2.setTimeTrafficLight = time;
+            //    }
+            //    else 
+            //    {
+            //        form2.setTimeTrafficLight = 0;
+            //    }
+                
+            //}
             form2.ShowDialog();
         }
         private void pictureBoxDev_MouseEnter (object sender, EventArgs e)
@@ -89,7 +114,7 @@ namespace AutoTraffic
                 numericUpDownLines.Visible = false;
                 numericUpDownWay.Visible = false;
                 labelLights.Visible = true;
-                textBoxLights.Visible = true;
+                numericUpDownTonnel.Visible = true;
                 //MessageBox.Show("ДА!");
             }
             else
@@ -99,7 +124,7 @@ namespace AutoTraffic
                 numericUpDownLines.Visible = true;
                 numericUpDownWay.Visible = true;
                 labelLights.Visible = false;
-                textBoxLights.Visible = false;
+                numericUpDownTonnel.Visible = false;
             }
         }
     }

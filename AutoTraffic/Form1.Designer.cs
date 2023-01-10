@@ -39,11 +39,12 @@ namespace AutoTraffic
             this.pictureBoxDev = new System.Windows.Forms.PictureBox();
             this.pictureBoxSys = new System.Windows.Forms.PictureBox();
             this.labelLights = new System.Windows.Forms.Label();
-            this.textBoxLights = new System.Windows.Forms.TextBox();
+            this.numericUpDownTonnel = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLines)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDev)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSys)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTonnel)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -141,20 +142,34 @@ namespace AutoTraffic
             this.labelLights.Text = "Укажите значение светофорной фазы";
             this.labelLights.Visible = false;
             // 
-            // textBoxLights
+            // numericUpDownTonnel
             // 
-            this.textBoxLights.Location = new System.Drawing.Point(448, 134);
-            this.textBoxLights.Name = "textBoxLights";
-            this.textBoxLights.Size = new System.Drawing.Size(100, 22);
-            this.textBoxLights.TabIndex = 22;
-            this.textBoxLights.Visible = false;
+            this.numericUpDownTonnel.Location = new System.Drawing.Point(439, 138);
+            this.numericUpDownTonnel.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.numericUpDownTonnel.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.numericUpDownTonnel.Name = "numericUpDownTonnel";
+            this.numericUpDownTonnel.Size = new System.Drawing.Size(120, 22);
+            this.numericUpDownTonnel.TabIndex = 23;
+            this.numericUpDownTonnel.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(596, 338);
-            this.Controls.Add(this.textBoxLights);
+            this.Controls.Add(this.numericUpDownTonnel);
             this.Controls.Add(this.labelLights);
             this.Controls.Add(this.pictureBoxDev);
             this.Controls.Add(this.pictureBoxSys);
@@ -173,6 +188,7 @@ namespace AutoTraffic
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownLines)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDev)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSys)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTonnel)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -189,7 +205,7 @@ namespace AutoTraffic
         private System.Windows.Forms.PictureBox pictureBoxSys;
         private System.Windows.Forms.PictureBox pictureBoxDev;
         private System.Windows.Forms.Label labelLights;
-        private System.Windows.Forms.TextBox textBoxLights;
+        private System.Windows.Forms.NumericUpDown numericUpDownTonnel;
     }
 }
 

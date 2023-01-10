@@ -113,5 +113,11 @@
   <ItemGroup>
     <None Include="Resources\Безымянный21.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CarRed.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\CarRed.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

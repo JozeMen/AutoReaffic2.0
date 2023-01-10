@@ -36,6 +36,7 @@ namespace AutoTraffic
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.buttonSet = new System.Windows.Forms.Button();
+            this.timerTrafficLight = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -117,5 +118,6 @@ namespace AutoTraffic
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button buttonSet;
+        private System.Windows.Forms.Timer timerTrafficLight;
     }
 }
